@@ -1,9 +1,11 @@
 import firebase from 'firebase/app'
 import 'firebase/analytics'
 require('firebase/auth')
-import common from '@/plugins/common'
+import constants from '~/plugins/constants'
 
-const firebaseConfig = common.firebaseConfig
-firebase.initializeApp(firebaseConfig)
+// アプリが既に初期化されているかチェック
+if (!firebase.apps.length) {
+  firebase.initializeApp(constants.firebaseConfig)
+}
+
 export default firebase
-// export default !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
