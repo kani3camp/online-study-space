@@ -19,3 +19,32 @@ $ npm run generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
+## Deploy
+
+This project is deployed to Firebase Hosting.
+
+First, login to Firebase and check the projects.
+
+```bash
+$ firebase login
+```
+
+```bash
+$ firebase projects:list
+```
+
+Select the project you want to deploy to.
+
+```bash
+$ firebase use <project-id>
+```
+
+Then, deploy the project.
+
+```bash
+$ npm run generate
+```
+
+```bash
+$ firebase deploy
+```

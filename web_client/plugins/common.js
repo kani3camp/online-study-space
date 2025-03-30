@@ -1,4 +1,5 @@
 import firebase from '~/plugins/firebase'
+import constants from '~/plugins/constants'
 
 const productionApiLink = {
   rooms: 'https://io551valj4.execute-api.ap-northeast-1.amazonaws.com/rooms',
@@ -46,16 +47,9 @@ const testFirebaseConfig = {
 }
 
 const common = {
-  key: {
-    youtubeLink: 'https://www.youtube.com/channel/UCXuD2XmPTdpVy7zmwbFVZWg',
-    twitterLink: 'https://twitter.com/osr_soraride',
-  },
-  // todo デプロイ時に変更
-  // apiLink: productionApiLink,
-  // firebaseConfig: productionFirebaseConfig,
-
-  apiLink: testApiLink,
-  firebaseConfig: testFirebaseConfig,
+  key: constants.key,
+  apiLink: constants.apiLink,
+  firebaseConfig: constants.firebaseConfig,
 }
 
 common.c = (m) => {
