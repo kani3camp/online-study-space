@@ -1,7 +1,6 @@
-import firebase from '~/plugins/firebase'
+import { analytics } from '~/plugins/firebase'
 
 export default ({ app }) => {
-  // if (process.env.NODE_ENV !== 'production') return
-
-  firebase.analytics()
+  // Firebase Analytics is already initialized in the firebase.js plugin
+  // This plugin is kept for compatibility with existing code
 }

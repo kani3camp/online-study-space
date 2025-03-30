@@ -125,7 +125,7 @@
 import common from '~/plugins/common'
 import NavigationDrawer from '@/components/NavigationDrawer'
 import ToolBar from '@/components/ToolBar'
-import firebase from '@/plugins/firebase'
+import { auth } from '~/plugins/firebase'
 import RoomLayout from '~/components/RoomLayout'
 import Dialog from '~/components/Dialog'
 
