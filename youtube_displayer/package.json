@@ -11,17 +11,19 @@
     "lint": "npm run lint:js"
   },
   "dependencies": {
-    "@mdi/font": "^5.5.55",
-    "nuxt": "^2.14.4",
-    "nuxt-webfontloader": "^1.1.0",
-    "ini": ">=1.3.6"
+    "@mdi/font": "^7.4.47",
+    "ini": ">=1.3.6",
+    "nuxt": "^2.17.0",
+    "nuxt-webfontloader": "^1.1.0"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^3.1.0",
-    "@nuxtjs/eslint-module": "^2.0.0",
-    "@nuxtjs/vuetify": "^1.11.2",
+    "@babel/eslint-parser": "^7.27.0",
+    "@nuxtjs/eslint-config": "^12.0.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/vuetify": "^1.12.3",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-nuxt": "^1.0.0"
+    "eslint": "^8.23.0",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "webpack": "^4.46.0"
   }
 }
