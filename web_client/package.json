@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "./node_modules/.bin/nuxt",
-    "build": "./node_modules/.bin/nuxt build",
-    "start": "./node_modules/.bin/nuxt start",
-    "export": "./node_modules/.bin/nuxt export",
-    "serve": "./node_modules/.bin/nuxt serve",
-    "generate": "./node_modules/.bin/nuxt generate"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "export": "nuxt export",
+    "serve": "nuxt serve",
+    "generate": "nuxt generate"
   },
   "dependencies": {
     "core-js": "^3.8.0",
     "css-loader": "^4.3.0",
-    "firebase": "^7.22.0",
+    "firebase": "^8.10.1",
     "firebaseui": "^4.6.1",
     "nuxt": "^2.13.0",
     "request": "^2.88.2",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^5.4.55",
+    "@nuxt/postcss8": "^1.1.3",
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/vuetify": "^1.11.2",
     "axios": ">=0.21.1",
@@ -32,6 +33,10 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-prettier-vue": "^2.1.1",
     "eslint-plugin-vue": "^7.2.0",
+    "postcss-import": "^16.1.0",
     "prettier": "^2.1.1"
+  },
+  "volta": {
+    "node": "16.14.0"
   }
 }
