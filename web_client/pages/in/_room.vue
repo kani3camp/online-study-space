@@ -106,7 +106,8 @@
 
 <script>
 import common from '~/plugins/common'
-import firebase from '@/plugins/firebase'
+import { auth } from '~/plugins/firebase'
+import { getIdToken } from 'firebase/auth'
 import Dialog from '~/components/Dialog'
 import RoomLayout from '~/components/RoomLayout'
 
@@ -179,8 +180,8 @@ export default {
         console.log('socket opened.')
         const params = {
           action: 'connect',
-          user_id: firebase.auth().currentUser.uid,
-          id_token: await firebase.auth().currentUser.getIdToken(false),
+          user_id: auth.currentUser.uid,
+          id_token: await getIdToken(auth.currentUser, false),
           room_id: vm.$store.state.room_id,
           seat_id: vm.$store.state.seat_id,
         }
@@ -198,7 +199,7 @@ export default {
           vm.room_layout = resp['room_layout']
           let amIin = false
           for (const user of resp['users']) {
-            if (user.user_id !== firebase.auth().currentUser.uid) {
+            if (user.user_id !== auth.currentUser.uid) {
             } else {
               amIin = true
             }
@@ -230,8 +231,8 @@ export default {
         if (vm.is_socket_open) {
           const params = {
             action: 'stay',
-            user_id: firebase.auth().currentUser.uid,
-            id_token: await firebase.auth().currentUser.getIdToken(false),
+            user_id: auth.currentUser.uid,
+            id_token: await getIdToken(auth.currentUser, false),
             room_id: vm.$store.state.room_id,
           }
           vm.socket.send(JSON.stringify(params))
@@ -259,4 +260,3 @@ export default {
 }
 </script>
 <style scoped></style>
-

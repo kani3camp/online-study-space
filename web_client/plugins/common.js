@@ -1,4 +1,5 @@
-import firebase from '~/plugins/firebase'
+import { auth } from '~/plugins/firebase'
+import { onAuthStateChanged, getIdToken } from '@firebase/auth'
 import constants from '~/plugins/constants'
 
 const common = {
@@ -12,14 +13,14 @@ common.c = (m) => {
 }
 
 common.onAuthStateChanged = (vm) => {
-  firebase.auth().onAuthStateChanged(async (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       console.log('User is signed in.')
       vm.$store.commit('setSignInState', true)
 
       await common.getUserData(vm)
 
-      await firebase.auth().currentUser.getIdToken(true) // refresh idToken
+      await getIdToken(auth.currentUser, true) // refresh idToken
     } else {
       console.log('User is signed out.')
       vm.$store.commit('signOut')
@@ -30,7 +31,7 @@ common.onAuthStateChanged = (vm) => {
 common.getUserData = async (vm) => {
   const url = new URL(common.apiLink.user_status)
   const params = {
-    user_id: firebase.auth().currentUser.uid,
+    user_id: auth.currentUser.uid,
   }
   const user_data = await common.httpGet(url, params)
   if (user_data.result !== 'ok') {

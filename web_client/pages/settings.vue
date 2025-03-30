@@ -125,7 +125,8 @@
 </template>
 
 <script>
-import firebase from '../plugins/firebase'
+import { auth } from '~/plugins/firebase'
+import { signOut as _signOut, updateProfile, getIdToken } from '@firebase/auth'
 import common from '@/plugins/common'
 import Dialog from '~/components/Dialog'
 
@@ -151,7 +152,7 @@ export default {
       return !this.display_name || !this.status_message
     },
     firebase_display_name: function () {
-      return firebase.auth().currentUser.displayName
+      return auth.currentUser?.displayName || ''
     },
     firebase_status_message: function () {
       return this.$store.state.user.status_message
@@ -172,10 +173,10 @@ export default {
       }
     },
     mail_address: function () {
-      return firebase.auth().currentUser.email
+      return auth.currentUser?.email || ''
     },
     provider_id: function () {
-      return firebase.auth().currentUser.providerData[0].providerId
+      return auth.currentUser?.providerData[0]?.providerId || ''
     },
     total_study_time: function () {
       const total_seconds = this.$store.state.user.total_study_time
@@ -218,20 +219,17 @@ export default {
       this.$router.push('/')
     },
     async signOut() {
-      const vm = this
-      await firebase
-        .auth()
-        .signOut()
-        .then(function () {
-          console.log('Sign-out successful.')
-          vm.dialog_message = 'サインアウトしました。'
-          vm.if_show_dialog = true
-        })
-        .catch(function (error) {
-          console.log(error)
-          vm.dialog_message = 'サインアウトに失敗しました。'
-          vm.if_show_dialog = true
-        })
+      try {
+        await _signOut(auth)
+        console.log('Sign-out successful.')
+        this.dialog_message = 'サインアウトしました。'
+        this.if_show_dialog = true
+        this.$store.commit('signOut')
+      } catch (error) {
+        console.log(error)
+        this.dialog_message = 'サインアウトに失敗しました。'
+        this.if_show_dialog = true
+      }
     },
     async saveNewValues() {
       console.log('saveNewValues()')
@@ -239,28 +237,35 @@ export default {
       this.dialog_message = '保存中'
       this.if_show_dialog = true
 
-      const url = common.apiLink.change_user_info
-      const params = {
-        user_id: firebase.auth().currentUser.uid,
-        id_token: await firebase.auth().currentUser.getIdToken(false),
-        display_name: this.display_name,
-        status_message: this.status_message,
-      }
-      const resp = await common.httpPost(url, params)
-      if (resp.result === 'ok') {
-        this.dialog_message = '完了！'
-        const new_display_name = this.display_name
-        await firebase.auth().currentUser.updateProfile({
-          displayName: new_display_name,
-        })
-        this.$store.commit('user/setStatusMessage', this.status_message)
-      } else {
-        console.log(resp)
+      try {
+        const url = common.apiLink.change_user_info
+        const params = {
+          user_id: auth.currentUser.uid,
+          id_token: await getIdToken(auth.currentUser, false),
+          display_name: this.display_name,
+          status_message: this.status_message,
+        }
+        const resp = await common.httpPost(url, params)
+        if (resp.result === 'ok') {
+          this.dialog_message = '完了！'
+          await updateProfile(auth.currentUser, {
+            displayName: this.display_name,
+          })
+          this.$store.commit('user/setStatusMessage', this.status_message)
+        } else {
+          console.log(resp)
+          this.dialog_message = 'エラー。もう一度試してみてください。'
+          this.display_name = this.firebase_display_name
+          this.status_message = this.firebase_status_message
+        }
+      } catch (error) {
+        console.error(error)
         this.dialog_message = 'エラー。もう一度試してみてください。'
         this.display_name = this.firebase_display_name
         this.status_message = this.firebase_status_message
+      } finally {
+        this.saving = false
       }
-      this.saving = false
     },
   },
 }

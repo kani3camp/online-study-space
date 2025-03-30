@@ -77,7 +77,8 @@
 import common from '~/plugins/common'
 import NavigationDrawer from '@/components/NavigationDrawer'
 import ToolBar from '@/components/ToolBar'
-import firebase from '@/plugins/firebase'
+import { auth } from '~/plugins/firebase'
+import { getIdToken } from '@firebase/auth'
 import Dialog from '~/components/Dialog'
 
 export default {
@@ -103,7 +104,7 @@ export default {
     mail_address: {
       get() {
         if (this.$store.state.isSignedIn) {
-          return firebase.auth().currentUser.email
+          return auth.currentUser?.email || ''
         } else {
           return ''
         }
@@ -129,23 +130,29 @@ export default {
         this.dialog_message = '送信中'
         this.submitting = true
 
-        const url = common.apiLink.send_contact_form
-        const params = {
-          mail_address: this.mail_address.toString(),
-          user_id: firebase.auth().currentUser.uid,
-          id_token: await firebase.auth().currentUser.getIdToken(false),
-          contact_type: this.selected_contact_type,
-          message: this.message,
-        }
-        const resp = await common.httpPost(url, params)
-        this.submitting = false
+        try {
+          const url = common.apiLink.send_contact_form
+          const params = {
+            mail_address: this.mail_address.toString(),
+            user_id: auth.currentUser.uid,
+            id_token: await getIdToken(auth.currentUser, false),
+            contact_type: this.selected_contact_type,
+            message: this.message,
+          }
+          const resp = await common.httpPost(url, params)
 
-        if (resp.result === 'ok') {
-          this.message = null
-          this.selected_contact_type = null
-          this.dialog_message = '送信が完了しました。お問い合わせ頂きありがとうございます。'
-        } else {
+          if (resp.result === 'ok') {
+            this.message = null
+            this.selected_contact_type = null
+            this.dialog_message = '送信が完了しました。お問い合わせ頂きありがとうございます。'
+          } else {
+            this.dialog_message = '送信に失敗しました。'
+          }
+        } catch (error) {
+          console.error(error)
           this.dialog_message = '送信に失敗しました。'
+        } finally {
+          this.submitting = false
         }
       } else {
         alert('未記入の項目があります。')

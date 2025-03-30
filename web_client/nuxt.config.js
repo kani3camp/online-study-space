@@ -19,7 +19,12 @@ export default {
         name: 'description',
         content: 'オンラインの作業部屋で集中しよう。Googleアカウントでログインして、各科目・作業内容の自習室を選んで入室しましょう。サービスは全て無料です。',
       },
-      { hid: 'keywords', name: 'keywords', content: 'オンライン作業部屋,オンライン自習室,オンライン勉強部屋,study with me,作業耐久' },
+
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: 'オンライン作業部屋,オンライン自習室,オンライン勉強部屋,study with me,作業耐久',
+      },
     ],
     script: [],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -27,7 +32,7 @@ export default {
   css: [],
   plugins: [
     {
-      src: '~/plugins/ga.js',
+      src: '~/plugins/firebase.js',
       mode: 'client',
     },
   ],
@@ -45,6 +50,19 @@ export default {
    */
   modules: [],
   /*
+   ** Vuetify configuration
+   */
+  vuetify: {
+    customVariables: [],
+    treeShake: true,
+    defaultAssets: {
+      font: {
+        family: 'Roboto',
+      },
+      icons: 'mdi',
+    },
+  },
+  /*
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
@@ -53,10 +71,22 @@ export default {
   // },
   watchers: {
     webpack: {
-      poll: true
-    }
+      poll: true,
+    },
   },
-  build: {},
+  build: {
+    transpile: ['firebase', 'firebaseui'],
+    extend(config, { isDev, isClient }) {
+      // Add support for WebP images
+      config.module.rules.push({
+        test: /\.(webp)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      })
+    },
+  },
   generate: {
     fallback: true,
   },

@@ -86,7 +86,7 @@
 </template>
 <script>
 import RoomLayout from '~/components/RoomLayout'
-import firebase from '~/plugins/firebase'
+import { auth } from '~/plugins/firebase'
 import common from '~/plugins/common'
 import Dialog from '~/components/Dialog'
 
