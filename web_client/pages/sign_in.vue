@@ -66,7 +66,8 @@
 import normalImage from '~/assets/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png'
 import hoveredImage from '~/assets/google_signin_buttons/web/2x/btn_google_signin_light_focus_web@2x.png'
 import pressedImage from '~/assets/google_signin_buttons/web/2x/btn_google_signin_light_pressed_web@2x.png'
-import firebase from '@/plugins/firebase'
+import { auth } from '~/plugins/firebase'
+import { GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
 import NavigationDrawer from '@/components/NavigationDrawer'
 import ToolBar from '@/components/ToolBar'
 import Dialog from '~/components/Dialog'
@@ -104,17 +105,14 @@ export default {
     },
     async signInWithGoogle() {
       const vm = this
-      const provider = new firebase.auth.GoogleAuthProvider()
-      await firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then(function () {
-          vm.dialog_message = 'ログインに成功しました。'
-        })
-        .catch(function (error) {
-          console.log(error)
-          vm.dialog_message = 'ログインに失敗しました。'
-        })
+      const provider = new GoogleAuthProvider()
+      try {
+        await signInWithPopup(auth, provider)
+        vm.dialog_message = 'ログインに成功しました。'
+      } catch (error) {
+        console.log(error)
+        vm.dialog_message = 'ログインに失敗しました。'
+      }
       vm.if_show_dialog = true
     },
   },
