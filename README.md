@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> このリポジトリはアーカイブとなり、サービスを終了しました。
+> YouTube版オンライン作業部屋は現在もサービスを継続しています。 https://github.com/kani3camp/youtube-study-space
+
 # 入室する
 [オンライン作業部屋](https://online-study-space.web.app)
 
