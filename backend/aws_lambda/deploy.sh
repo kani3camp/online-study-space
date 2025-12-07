@@ -1,5 +1,3 @@
-# Windows
-
 # 新しく関数をデプロイしたら、タイムアウトが3秒のため長めにしておく
 # change_user_info, create_new_news, create_new_room, end_studying, news, online_users, room_layout, room_status, rooms,
 # send_contact_form, start_studying, stay_studying, update_database,
@@ -10,7 +8,10 @@
 # test_send_contact_form, test_start_studying, test_stay_studying, test_update_database,
 # test_upload_room_layout, test_user_status
 
-set GOOS=linux
+
+# Windows (PowerShell)
+
+$env:GOOS="linux"; $env:GOARCH="amd64"; $env:CGO_ENABLED="0";
 go build -o main common.go send_live_chat_message.go     create_new_news.go
 C:\Users\momom\go\bin\build-lambda-zip.exe -output main.zip main
 aws lambda create-function --function-name     create_new_news     --runtime go1.x --zip-file fileb://main.zip --handler main --role arn:aws:iam::652333062396:role/service-role/my-first-golang-lambda-function-role-cb8uw4th
